@@ -1,0 +1,74 @@
+/* ===== Слои эффектов ===== */
+#atm-fog, #atm-particles {
+    position: fixed; left: 0; top: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 2500;
+}
+#atm-particles { z-index: 2501; }
+
+#atm-bolt {
+    position: fixed; left: 0; top: 0; width: 100%; height: 100%;
+    pointer-events: none; z-index: 2502; background: #dfe8ff; opacity: 0;
+}
+#atm-bolt.go { animation: atm-bolt 1.1s ease-out 1; }
+@keyframes atm-bolt {
+    0% { opacity: 0; } 4% { opacity: .85; } 10% { opacity: .1; }
+    18% { opacity: .6; } 35% { opacity: .05; } 100% { opacity: 0; }
+}
+
+/* ===== Чёрно-белый режим, блюр по краям, виньетка ===== */
+#atm-bw, #atm-edge, #atm-vig {
+    position: fixed; left: 0; top: 0; width: 100%; height: 100%;
+    pointer-events: none; opacity: 0; visibility: hidden;
+    transition: opacity 1.4s ease, visibility 0s linear 1.4s;
+}
+#atm-bw.on, #atm-edge.on, #atm-vig.on {
+    opacity: 1; visibility: visible;
+    transition: opacity 1.4s ease, visibility 0s;
+}
+#atm-bw {
+    z-index: 9000;
+    -webkit-backdrop-filter: grayscale(var(--atm-gray, 1)) contrast(1.06);
+    backdrop-filter: grayscale(var(--atm-gray, 1)) contrast(1.06);
+}
+#atm-edge {
+    z-index: 9001;
+    -webkit-backdrop-filter: blur(var(--atm-blur, 8px));
+    backdrop-filter: blur(var(--atm-blur, 8px));
+    -webkit-mask-image: radial-gradient(ellipse at center, transparent var(--atm-inner, 40%), #000 100%);
+    mask-image: radial-gradient(ellipse at center, transparent var(--atm-inner, 40%), #000 100%);
+}
+#atm-vig {
+    z-index: 9002;
+    background: radial-gradient(ellipse at center, transparent var(--atm-vi, 45%), rgba(0,0,0,var(--atm-va, .7)) 100%);
+}
+
+/* ===== Плавное "плавание" страницы ===== */
+body.atm-sway #sheld {
+    animation: atm-sway 14s ease-in-out infinite;
+    transform-origin: 50% 50%;
+    will-change: transform;
+}
+body.atm-sway #bg1, body.atm-sway #bg_custom {
+    animation: atm-sway-bg 19s ease-in-out infinite;
+    will-change: transform;
+}
+@keyframes atm-sway {
+    0%, 100% { transform: translate(0,0) rotate(0deg); }
+    20% { transform: translate(calc(var(--atm-amp,4) * -1.2px), calc(var(--atm-amp,4) * .8px)) rotate(calc(var(--atm-amp,4) * -.07deg)); }
+    40% { transform: translate(calc(var(--atm-amp,4) * .6px), calc(var(--atm-amp,4) * 1.4px)) rotate(calc(var(--atm-amp,4) * .05deg)); }
+    60% { transform: translate(calc(var(--atm-amp,4) * 1.2px), calc(var(--atm-amp,4) * -.6px)) rotate(calc(var(--atm-amp,4) * .07deg)); }
+    80% { transform: translate(calc(var(--atm-amp,4) * -.5px), calc(var(--atm-amp,4) * -1.1px)) rotate(calc(var(--atm-amp,4) * -.04deg)); }
+}
+@keyframes atm-sway-bg {
+    0%, 100% { transform: scale(1.06) translate(0,0); }
+    25% { transform: scale(1.06) translate(calc(var(--atm-amp,4) * 1.8px), calc(var(--atm-amp,4) * -1px)); }
+    50% { transform: scale(1.06) translate(calc(var(--atm-amp,4) * -1px), calc(var(--atm-amp,4) * 1.6px)); }
+    75% { transform: scale(1.06) translate(calc(var(--atm-amp,4) * -1.8px), calc(var(--atm-amp,4) * -.8px)); }
+}
+
+/* ===== Панель настроек ===== */
+.atm-root .atm-row { display: block; margin: 8px 0; }
+.atm-root .atm-row input[type=range] { width: 100%; }
+.atm-root .atm-h { margin: 12px 0 4px; opacity: .7; font-weight: 600; }
+.atm-root .atm-sound { padding: 4px 0; border-bottom: 1px solid rgba(128,128,128,.2); }
+.atm-root .inline-drawer { margin: 6px 0; }
